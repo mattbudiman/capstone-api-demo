@@ -1,6 +1,6 @@
 const sdk = require('microsoft-cognitiveservices-speech-sdk');
 
-// AZURE SDK CONFIG
+// AZURE SPEECH SDK CONFIG
 const subscriptionKey = process.env.AZURE_SPEECH_SUBSCRIPTION_KEY;
 const serviceRegion = process.env.AZURE_SPEECH_SERVICE_REGION;
 

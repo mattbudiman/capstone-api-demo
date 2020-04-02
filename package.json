@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@azure/ai-text-analytics": "^1.0.0-preview.3",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "microsoft-cognitiveservices-speech-sdk": "^1.11.0",
