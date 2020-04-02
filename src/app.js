@@ -24,10 +24,12 @@ app.post('/api/v1/calls', upload.single('audio'), (req, res) => {
       Azure.TextAnalytics.analyzeSentiment(speechResult.privText)
         .then(sentimentResult => {
           console.log(sentimentResult);
+          const { sentiment, confidenceScores } = sentimentResult[0];
           res.send({
             ok: true,
-            speechResult,
-            sentimentResult
+            transcript: speechResult.privText,
+            sentiment,
+            confidenceScores
           });
         })
         .catch(handleError);
