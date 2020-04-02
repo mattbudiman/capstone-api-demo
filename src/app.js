@@ -1,7 +1,7 @@
 const path = require('path');
 const express = require('express');
 const multer = require('multer');
-const Azure = require('./Azure');  // Wrapper around Azure SDK
+const Azure = require('./Azure');  // Wrapper around Azure SDKs
 
 const app = express();
 const upload = multer();  // File upload middleware
@@ -15,7 +15,6 @@ app.get('/', (req, res) => {
 app.post('/api/v1/calls', upload.single('audio'), (req, res) => {
   console.log(req.file);
   const recognizer = Azure.SpeechToText.createSpeechRecognizer(req.file.buffer);
-  const handleError = err => res.send({ ok: false, err });  // Error handler
   // Send audio file to Azure
   recognizer.recognizeOnceAsync(
     speechResult => {
@@ -32,10 +31,13 @@ app.post('/api/v1/calls', upload.single('audio'), (req, res) => {
             confidenceScores
           });
         })
-        .catch(handleError);
+        .catch(error => res.send({ ok: false, error }));
       recognizer.close();
     },
-    handleError
+    error => {
+      res.send({ ok: false, error });
+      recognizer.close();
+    }
   );
 });
 
