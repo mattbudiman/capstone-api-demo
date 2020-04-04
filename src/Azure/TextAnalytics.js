@@ -10,8 +10,10 @@ const credential = new TextAnalyticsApiKeyCredential(apiKey);
 
 const client = new TextAnalyticsClient(endpoint, credential);
 
-function analyzeSentiment(text) {
-  return client.analyzeSentiment([text]);  // Returns a Promise
+async function analyzeSentiment(text) {
+  const [result] = await client.analyzeSentiment([text]);
+  console.log(result);
+  return result;
 }
 
 module.exports = {

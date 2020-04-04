@@ -2,6 +2,7 @@ const path = require('path');
 const express = require('express');
 const multer = require('multer');
 const Azure = require('./Azure');  // Wrapper around Azure SDKs
+const db = require('./db');
 
 const app = express();
 const upload = multer();  // File upload middleware
@@ -14,28 +15,47 @@ app.get('/', (req, res) => {
 // API ROUTES
 app.post('/api/v1/calls', upload.single('audio'), (req, res) => {
   console.log(req.file);
+  const agentId = parseInt(req.body.agentId);
+  const customerId = parseInt(req.body.customerId);
+
+  // BEGIN CALL PROCESSING
   const recognizer = Azure.SpeechToText.createSpeechRecognizer(req.file.buffer);
-  // Send audio file to Azure
+  // Send audio file to Azure to be converted to text
   recognizer.recognizeOnceAsync(
-    speechResult => {
+    async speechResult => {
       console.log(speechResult);
-      // Do sentiment analysis on audio text
-      Azure.TextAnalytics.analyzeSentiment(speechResult.privText)
-        .then(sentimentResult => {
-          console.log(sentimentResult);
-          const { sentiment, confidenceScores } = sentimentResult[0];
-          res.send({
-            ok: true,
-            transcript: speechResult.privText,
-            sentiment,
-            confidenceScores
-          });
-        })
-        .catch(error => res.send({ ok: false, error }));
+      const transcript = speechResult.privText;
+      try {
+        // Do sentiment analysis
+        const {
+          sentiment,
+          confidenceScores
+        } = await Azure.TextAnalytics.analyzeSentiment(transcript);
+        // Add call to database
+        const call = await db.createCall({
+          agentId,
+          customerId,
+          transcript,
+          sentiment: {
+            label: sentiment,
+            scores: confidenceScores
+          }
+        });
+        console.log(call);
+        res.send({ ok: true, call });
+      } catch (error) {
+        res.send({
+          ok: false,
+          message: `An error occurred: ${JSON.stringify(error)}`
+        });
+      }
       recognizer.close();
     },
     error => {
-      res.send({ ok: false, error });
+      res.send({
+        ok: false,
+        message: `An error occurred: ${JSON.stringify(error)}`
+      });
       recognizer.close();
     }
   );
