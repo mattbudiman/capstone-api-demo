@@ -7,6 +7,7 @@ const multer = require('multer');
 
 const Azure = require('./Azure');  // Wrapper around Azure SDKs
 const db = require('./db');
+const Authorize = require('./middleware/Authorize');
 
 const app = express();
 app.use(bodyParser.json());
@@ -70,6 +71,10 @@ app.post('/api/v1/calls', upload.single('audio'), (req, res) => {
   );
 });
 
+app.get('/api/v1/test', Authorize.user, (req, res) => {
+  res.end('Success');
+});
+
 app.post('/api/v1/login', async (req, res) => {
   if (!req.body.username || !req.body.password) {
     return res.status(401).end({message: 'Missing Required Fields'});
@@ -84,13 +89,13 @@ app.post('/api/v1/login', async (req, res) => {
     return res.status(200).end(JSON.stringify(result));
   }
   else {
-    return res.status(401).end(JSON.stringify({error: 'Invalid Login Credentials'}));
+    return res.status(401).end(JSON.stringify({message: 'Invalid Login Credentials'}));
   }
 });
 
 app.post('/api/v1/register', async (req, res) => {
   if (!req.body.username || !req.body.password || !req.body.firstName || !req.body.lastName) {
-    return res.status(401).end(JSON.stringify({error: 'Missing Required Fields'}));
+    return res.status(401).end(JSON.stringify({message: 'Missing Required Fields'}));
   }
   const result = await db.createUser({
     username: req.body.username,
@@ -104,7 +109,7 @@ app.post('/api/v1/register', async (req, res) => {
     return res.status(200).end(JSON.stringify(result));
   }
   else {
-    return res.status(401).end(JSON.stringify({error: 'Could Not Create Account'}));
+    return res.status(401).end(JSON.stringify({message: 'Could Not Create Account'}));
   }
 });
 
