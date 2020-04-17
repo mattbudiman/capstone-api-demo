@@ -16,6 +16,7 @@ CREATE TABLE users (
   first_name VARCHAR(20) NOT NULL,
   last_name VARCHAR(20) NOT NULL,
   username VARCHAR(20) UNIQUE NOT NULL,
+  password VARCHAR(60) NOT NULL,
   PRIMARY KEY (id)
 );
 
