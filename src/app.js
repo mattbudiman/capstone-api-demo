@@ -23,52 +23,21 @@ app.get('/', (req, res) => {
 });
 
 // API ROUTES
-app.post('/api/v1/calls', upload.single('audio'), (req, res) => {
+app.post('/api/v1/calls', upload.single('audio'), async (req, res) => {
   console.log(req.file);
-  const agentId = parseInt(req.body.agentId);
-  const customerId = parseInt(req.body.customerId);
-
-  // BEGIN CALL PROCESSING
-  const recognizer = Azure.SpeechToText.createSpeechRecognizer(req.file.buffer);
-  // Send audio file to Azure to be converted to text
-  recognizer.recognizeOnceAsync(
-    async speechResult => {
-      console.log(speechResult);
-      const transcript = speechResult.privText;
-      try {
-        // Do sentiment analysis
-        const {
-          sentiment,
-          confidenceScores
-        } = await Azure.TextAnalytics.analyzeSentiment(transcript);
-        // Add call to database
-        const call = await db.createCall({
-          agentId,
-          customerId,
-          transcript,
-          sentiment: {
-            label: sentiment,
-            scores: confidenceScores
-          }
-        });
-        console.log(call);
-        res.send({ ok: true, call });
-      } catch (error) {
-        res.send({
-          ok: false,
-          message: `An error occurred: ${JSON.stringify(error)}`
-        });
-      }
-      recognizer.close();
-    },
-    error => {
-      res.send({
-        ok: false,
-        message: `An error occurred: ${JSON.stringify(error)}`
-      });
-      recognizer.close();
-    }
-  );
+  try {
+    const transcript = await Azure.SpeechToText.recognize(req.file.buffer);
+    const sentiment = await Azure.TextAnalytics.analyzeSentiment(transcript);
+    const call = await db.createCall({
+      agentId: parseInt(req.body.agentId),
+      customerId: parseInt(req.body.customerId),
+      transcript,
+      sentiment
+    });
+    res.send({ ok: true, call });
+  } catch (error) {
+    res.send({ ok: false, message: `Error: ${JSON.stringify(error)}` });
+  }
 });
 
 app.get('/api/v1/test', Authorize.user, (req, res) => {

@@ -13,7 +13,10 @@ const client = new TextAnalyticsClient(endpoint, credential);
 async function analyzeSentiment(text) {
   const [result] = await client.analyzeSentiment([text]);
   console.log(result);
-  return result;
+  return {
+    label: result.sentiment,
+    scores: result.confidenceScores
+  };
 }
 
 module.exports = {

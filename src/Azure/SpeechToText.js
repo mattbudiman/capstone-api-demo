@@ -15,6 +15,23 @@ function createSpeechRecognizer(audioFileBuffer) {
   return new sdk.SpeechRecognizer(speechConfig, audioConfig);
 }
 
+function recognize(audioFileBuffer) {
+  const recognizer = createSpeechRecognizer(audioFileBuffer);
+  return new Promise((resolve, reject) => {
+    recognizer.recognizeOnceAsync(
+      result => {
+        console.log(result);
+        resolve(result.privText);
+        recognizer.close();
+      },
+      error => {
+        reject(error);
+        recognizer.close();
+      }
+    );
+  })
+}
+
 module.exports = {
-  createSpeechRecognizer
+  recognize
 };
