@@ -40,6 +40,15 @@ app.post('/api/v1/calls', upload.single('audio'), async (req, res) => {
   }
 });
 
+app.post('/api/v1/me/calls', Authorize.agent, async (req, res) => {
+  try {
+    const calls = await db.getCallsBy(req.session.userId);
+    res.send({ ok: true, calls });
+  } catch (error) {
+    res.send({ ok: false, message: `Error: ${JSON.stringify(error)}` });
+  }
+});
+
 app.get('/api/v1/test', Authorize.user, (req, res) => {
   res.end('Success');
 });
@@ -54,7 +63,7 @@ app.post('/api/v1/login', async (req, res) => {
   });
   if (result) {
     req.session.userId = result.id;
-    req.session.userType = "supervisor";
+    req.session.userType = "agent";
     return res.status(200).end(JSON.stringify(result));
   }
   else {
@@ -74,7 +83,7 @@ app.post('/api/v1/register', async (req, res) => {
   });
   if (result) {
     req.session.userId = result.id;
-    req.session.userType = "supervisor";
+    req.session.userType = "agent";
     return res.status(200).end(JSON.stringify(result));
   }
   else {
