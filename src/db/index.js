@@ -13,6 +13,28 @@ async function querySingle(sql, values) {
   return row || null;
 }
 
+/**
+ * Converts the fields of a Postgres call record to camelcase.
+ * @param {*} call Call record as returned by Postgres
+ */
+function convertCallToCamelCase(call) {
+  console.log(call);
+  return {
+    id: call.id,
+    agentId: call.agent_id,
+    customerId: call.customer_id,
+    transcript: call.transcript,
+    sentiment: {
+      label: call.sentiment.label,
+      scores: {
+        positive: call.sentiment.scores.positive,
+        neutral: call.sentiment.scores.neutral,
+        negative: call.sentiment.scores.negative
+      }
+    }
+  };
+}
+
 async function createCall({ agentId, customerId, transcript, sentiment }) {
   const sql = `
     INSERT INTO calls (
@@ -22,7 +44,11 @@ async function createCall({ agentId, customerId, transcript, sentiment }) {
       sentiment
     )
       VALUES ($1, $2, $3, ($4, ($5, $6, $7)))
-      RETURNING *
+      RETURNING
+        agent_id,
+        customer_id,
+        transcript,
+        to_json(sentiment) AS sentiment
   `;
   const values = [
     agentId,
@@ -34,20 +60,7 @@ async function createCall({ agentId, customerId, transcript, sentiment }) {
     sentiment.scores.negative
   ];
   const call = await querySingle(sql, values);
-  return {
-    id: call.id,
-    agentId: call.agent_id,
-    customerId: call.customer_id,
-    transcript,
-    sentiment: {
-      label: sentiment.label,
-      scores: {
-        positive: sentiment.scores.positive,
-        neutral: sentiment.scores.neutral,
-        negative: sentiment.scores.negative
-      }
-    }
-  };
+  return convertCallToCamelCase(call);
 }
 
 async function createUser({ username, password, firstName, lastName }) {
@@ -73,9 +86,15 @@ async function createUser({ username, password, firstName, lastName }) {
         firstName,
         lastName
     ];
+    let user = null;
+    const client = await pool.connect();  // Necessary to use transactions
     try {
-        const result = await querySingle(sql, values);
-        return {
+        await client.query('BEGIN');
+        const { rows } = await client.query(sql, values);
+        const [result] = rows;
+        await client.query('INSERT INTO agents VALUES ($1) RETURNING *', [result.id]);
+        await client.query('COMMIT');
+        user = {
             id: result.id,
             username: result.username,
             firstName: result.first_name,
@@ -85,7 +104,12 @@ async function createUser({ username, password, firstName, lastName }) {
     catch(e) {
         //probably duplicate username
         //console.log(e);
+        await client.query('ROLLBACK');
     }
+    finally {
+        client.release();
+    }
+    return user;
 }
 
 async function getUser({ username }) {
@@ -124,8 +148,20 @@ async function authenticateUser({ username, password }) {
   return null;
 }
 
+/**
+ * Get all calls an agent was part of.
+ * @param {*} agentId The user ID of the agent
+ */
+async function getCallsBy(agentId) {
+  const sql = 'SELECT * FROM calls WHERE user_id = $1';
+  const values = [agentId];
+  const calls = await query(sql, values);
+  return calls.map(call => convertCallToCamelCase(call));
+}
+
 module.exports = {
   createCall,
   createUser,
-  authenticateUser
+  authenticateUser,
+  getCallsBy
 };
