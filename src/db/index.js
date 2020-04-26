@@ -45,6 +45,7 @@ async function createCall({ agentId, customerId, transcript, sentiment }) {
     )
       VALUES ($1, $2, $3, ($4, ($5, $6, $7)))
       RETURNING
+        id,
         agent_id,
         customer_id,
         transcript,
