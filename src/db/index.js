@@ -153,7 +153,15 @@ async function authenticateUser({ username, password }) {
  * @param {*} agentId The user ID of the agent
  */
 async function getCallsBy(agentId) {
-  const sql = 'SELECT * FROM calls WHERE user_id = $1';
+  const sql = `
+    SELECT
+      id,
+      agent_id,
+      customer_id,
+      transcript,
+      to_json(sentiment) AS sentiment
+    FROM calls WHERE agent_id = $1
+  `;
   const values = [agentId];
   const calls = await query(sql, values);
   return calls.map(call => convertCallToCamelCase(call));

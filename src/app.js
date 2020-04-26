@@ -45,7 +45,8 @@ app.post('/api/v1/test', Authorize.user, (req, res) => {
   res.end(JSON.stringify({message: 'This is a test.'}));
 });
 
-app.post('/api/v1/me/calls', Authorize.agent, async (req, res) => {
+app.get('/api/v1/me/calls', Authorize.user, async (req, res) => {
+  res.setHeader('Access-Control-Allow-Credentials', 'true');
   try {
     const calls = await db.getCallsBy(req.session.userId);
     res.send({ ok: true, calls });
