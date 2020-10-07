@@ -26,16 +26,16 @@ app.get('/', (req, res) => {
 app.post('/api/v1/calls', upload.single('audio'), async (req, res) => {
   console.log(req.file);
   try {
-    const transcript = await Azure.SpeechToText.recognize(req.file.buffer);
-    const sentiment = await Azure.TextAnalytics.analyzeSentiment(transcript);
-    const call = await db.createCall({
-      agentId: parseInt(req.body.agentId),
-      customerId: parseInt(req.body.customerId),
-      transcript,
-      sentiment
-    });
-    console.log(call);
+    const agentId = parseInt(req.body.agentId);
+    const customerId = parseInt(req.body.customerId);
+
+    const call = await db.createEmptyCall({ agentId, customerId });
+
+    // Upload call audio
+    await Azure.Storage.uploadCall(req.file, call.id);
+
     res.send({ ok: true, call });
+
   } catch (error) {
     res.send({ ok: false, error: `Error: ${JSON.stringify(error)}` });
   }

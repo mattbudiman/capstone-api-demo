@@ -46,8 +46,8 @@ CREATE TABLE calls (
   id BIGSERIAL,
   agent_id INTEGER NOT NULL,
   customer_id INTEGER NOT NULL,
-  transcript TEXT NOT NULL,
-  sentiment SENTIMENT NOT NULL,
+  transcript TEXT,
+  sentiment SENTIMENT,
   PRIMARY KEY (id),
   FOREIGN KEY (agent_id) REFERENCES agents (user_id)
     ON DELETE CASCADE,

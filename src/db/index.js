@@ -35,6 +35,30 @@ function convertCallToCamelCase(call) {
   };
 }
 
+async function createEmptyCall({ agentId, customerId }) {
+  const sql = `
+    INSERT INTO calls (
+      agent_id,
+      customer_id
+    )
+      VALUES ($1, $2)
+      RETURNING
+        id,
+        agent_id,
+        customer_id
+  `;
+  const values = [
+    agentId,
+    customerId
+  ];
+  const call = await querySingle(sql, values);
+  return {
+    id: call.id,
+    agentId: call.agent_id,
+    customerId: call.customerId
+  };
+}
+
 async function createCall({ agentId, customerId, transcript, sentiment }) {
   const sql = `
     INSERT INTO calls (
@@ -169,6 +193,7 @@ async function getCallsBy(agentId) {
 }
 
 module.exports = {
+  createEmptyCall,
   createCall,
   createUser,
   authenticateUser,
