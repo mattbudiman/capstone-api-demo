@@ -68,7 +68,8 @@ app.post('/api/v1/login', async (req, res) => {
   });
   if (result) {
     req.session.userId = result.id;
-    req.session.userType = "agent";
+    req.session.isAgent = result.isAgent;
+    req.session.isSupervisor = result.isSupervisor;
     return res.status(200).end(JSON.stringify(result));
   }
   else {
@@ -90,7 +91,8 @@ app.post('/api/v1/register', async (req, res) => {
   });
   if (result) {
     req.session.userId = result.id;
-    req.session.userType = "agent";
+    req.session.isAgent = result.isAgent;
+    req.session.isSupervisor = result.isSupervisor;
     return res.status(200).end(JSON.stringify(result));
   }
   else {

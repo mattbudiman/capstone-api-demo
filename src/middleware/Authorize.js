@@ -6,14 +6,14 @@ function authorizeUser(req, res, next) {
 }
 
 function authorizeAgent(req, res, next) {
-    if(req.session && req.session.userId && req.session.userType === 'agent') {
+    if(req.session && req.session.userId && (req.session.isAgent || req.session.isSupervisor)) {
         return next();
     }
     return res.status(401).end(JSON.stringify({message: 'Unauthorized'}));
 }
 
 function authorizeSupervisor(req, res, next) {
-    if(req.session && req.session.userId && req.session.userType === 'supervisor') {
+    if(req.session && req.session.userId && req.session.isSupervisor) {
         return next();
     }
     return res.status(401).end(JSON.stringify({message: 'Unauthorized'}));
