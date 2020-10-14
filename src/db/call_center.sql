@@ -11,27 +11,16 @@ CREATE TYPE SENTIMENT AS (
   scores SENTIMENT_SCORES
 );
 
+CREATE TYPE USER_TYPE AS ENUM ('agent', 'supervisor');
+
 CREATE TABLE users (
   id BIGSERIAL,
   first_name VARCHAR(20) NOT NULL,
   last_name VARCHAR(20) NOT NULL,
   username VARCHAR(20) UNIQUE NOT NULL,
-  password VARCHAR(60) NOT NULL,
+  hashed_password VARCHAR(60) NOT NULL,
+  user_type USER_TYPE NOT NULL DEFAULT 'agent',
   PRIMARY KEY (id)
-);
-
-CREATE TABLE agents (
-  user_id INTEGER,
-  PRIMARY KEY (user_id),
-  FOREIGN KEY (user_id) REFERENCES users (id)
-    ON DELETE CASCADE
-);
-
-CREATE TABLE supervisors (
-  user_id INTEGER,
-  PRIMARY KEY (user_id),
-  FOREIGN KEY (user_id) REFERENCES users (id)
-    ON DELETE CASCADE
 );
 
 CREATE TABLE customers (
@@ -44,12 +33,12 @@ CREATE TABLE customers (
 
 CREATE TABLE calls (
   id BIGSERIAL,
-  agent_id INTEGER NOT NULL,
+  user_id BIGINT NOT NULL,
   customer_id INTEGER NOT NULL,
   transcript TEXT,
   sentiment SENTIMENT,
   PRIMARY KEY (id),
-  FOREIGN KEY (agent_id) REFERENCES agents (user_id)
+  FOREIGN KEY (user_id) REFERENCES users (id)
     ON DELETE CASCADE,
   FOREIGN KEY (customer_id) REFERENCES customers (id)
     ON DELETE CASCADE

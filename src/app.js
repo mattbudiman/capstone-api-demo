@@ -23,13 +23,13 @@ app.get('/', (req, res) => {
 });
 
 // API ROUTES
-app.post('/api/v1/calls', upload.single('audio'), async (req, res) => {
+app.post('/api/v1/calls', Authorize.supervisor, upload.single('audio'), async (req, res) => {
   console.log(req.file);
   try {
-    const agentId = parseInt(req.body.agentId);
+    const userId = parseInt(req.body.userId);
     const customerId = parseInt(req.body.customerId);
 
-    const call = await db.createEmptyCall({ agentId, customerId });
+    const call = await db.createEmptyCall({ userId, customerId });
 
     // Upload call audio
     await Azure.Storage.uploadCall(req.file, call.id);
@@ -41,12 +41,30 @@ app.post('/api/v1/calls', upload.single('audio'), async (req, res) => {
   }
 });
 
+app.get('/api/v1/users', Authorize.supervisor, async (req, res) => {
+  try {
+    const users = await db.getUsers()
+    res.send({ ok: true, users });
+  } catch (error) {
+    res.send({ ok: false, error: `Error: ${JSON.stringify(error)}` });
+  }
+});
+
+app.get('/api/v1/customers', Authorize.supervisor, async (req, res) => {
+  try {
+    const customers = await db.getCustomers();
+    res.send({ ok: true, customers });
+  } catch (error) {
+    res.send({ ok: false, error: `Error: ${JSON.stringify(error)}` });
+  }
+});
+
 app.post('/api/v1/test', Authorize.user, (req, res) => {
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.end(JSON.stringify({message: 'This is a test.'}));
 });
 
-app.get('/api/v1/me/calls', Authorize.agent, async (req, res) => {
+app.get('/api/v1/me/calls', Authorize.user, async (req, res) => {
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   try {
     const calls = await db.getCallsBy(req.session.userId);
@@ -68,7 +86,7 @@ app.post('/api/v1/login', async (req, res) => {
   });
   if (result) {
     req.session.userId = result.id;
-    req.session.userType = "agent";
+    req.session.userType = result.userType;
     return res.status(200).end(JSON.stringify(result));
   }
   else {
@@ -90,7 +108,7 @@ app.post('/api/v1/register', async (req, res) => {
   });
   if (result) {
     req.session.userId = result.id;
-    req.session.userType = "agent";
+    req.session.userType = result.userType;
     return res.status(200).end(JSON.stringify(result));
   }
   else {
