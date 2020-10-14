@@ -18,7 +18,7 @@ async function querySingle(sql, values) {
  * @param {*} call Call record as returned by Postgres
  */
 function convertCallToCamelCase(call) {
-  console.log(call);
+  //console.log(call);
   return {
     id: call.id,
     agentId: call.agent_id,
@@ -151,14 +151,17 @@ async function getUser({ username }) {
 
 async function authenticateUser({ username, password }) {
   const sql = `
-    SELECT u.*, p.relname
-    FROM users u, pg_class p
+    SELECT u.*,
+           CASE WHEN EXISTS(SELECT 1 FROM agents a WHERE a.user_id = u.id) THEN true ELSE false END AS "isAgent",
+           CASE WHEN EXISTS(SELECT 1 FROM supervisors s WHERE s.user_id = u.id) THEN true ELSE false END AS "isSupervisor"
+    FROM users u
     WHERE username = $1
   `;
   const values = [
     username
   ];
   const result = await querySingle(sql, values);
+  console.log(result);
   if(result) {
     const match = await new Promise((resolve, reject) => {
         bcrypt.compare(password, result.password, function(err, result) {
