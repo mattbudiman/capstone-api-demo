@@ -129,7 +129,7 @@ async function createUser({ username, password, firstName, lastName }) {
     }
     catch(e) {
         //probably duplicate username
-        //console.log(e);
+        console.log(e);
         await client.query('ROLLBACK');
     }
     finally {
@@ -198,10 +198,59 @@ async function getCallsBy(agentId) {
   return calls.map(call => convertCallToCamelCase(call));
 }
 
+async function getAgents() {
+  const sql = `
+    SELECT
+      id,
+      first_name,
+      last_name,
+      username,
+      id IN (SELECT user_id FROM agents) AS is_agent,
+      id IN (SELECT user_id FROM supervisors) AS is_supervisor
+    FROM users
+    WHERE id IN (SELECT user_id FROM agents)
+  `;
+  const results = await query(sql);
+  const agents = results.map(result => {
+    return {
+      id: result.id,
+      firstName: result.first_name,
+      lastName: result.last_name,
+      username: result.username,
+      isAgent: result.is_agent,
+      isSupervisor: result.is_supervisor
+    }
+  });
+  return agents;
+}
+
+async function getCustomers() {
+  const sql = `
+    SELECT
+      id,
+      first_name,
+      last_name,
+      phone_number
+    FROM customers
+  `;
+  const results = await query(sql);
+  const customers = results.map(result => {
+    return {
+      id: result.id,
+      firstName: result.first_name,
+      lastName: result.last_name,
+      phoneNumber: result.phone_number
+    }
+  });
+  return customers;
+}
+
 module.exports = {
   createEmptyCall,
   createCall,
   createUser,
   authenticateUser,
-  getCallsBy
+  getCallsBy,
+  getAgents,
+  getCustomers
 };

@@ -23,7 +23,7 @@ app.get('/', (req, res) => {
 });
 
 // API ROUTES
-app.post('/api/v1/calls', upload.single('audio'), async (req, res) => {
+app.post('/api/v1/calls', Authorize.supervisor, upload.single('audio'), async (req, res) => {
   console.log(req.file);
   try {
     const agentId = parseInt(req.body.agentId);
@@ -37,7 +37,25 @@ app.post('/api/v1/calls', upload.single('audio'), async (req, res) => {
     res.send({ ok: true, call });
 
   } catch (error) {
-    res.send({ ok: false, error: `Error: ${JSON.stringify(error)}` });
+    res.send({ ok: false, message: error.message });
+  }
+});
+
+app.get('/api/v1/agents', Authorize.supervisor, async (req, res) => {
+  try {
+    const agents = await db.getAgents();
+    res.send({ ok: true, agents });
+  } catch (error) {
+    res.send({ ok: false, message: error.message });
+  }
+});
+
+app.get('/api/v1/customers', Authorize.supervisor, async (req, res) => {
+  try {
+    const customers = await db.getCustomers();
+    res.send({ ok: true, customers });
+  } catch (error) {
+    res.send({ ok: false, message: error.message });
   }
 });
 
