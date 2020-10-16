@@ -18,7 +18,6 @@ async function querySingle(sql, values) {
  * @param {*} call Call record as returned by Postgres
  */
 function convertCallToCamelCase(call) {
-  console.log(call);
   return {
     id: call.id,
     agentId: call.agent_id,
@@ -153,8 +152,10 @@ async function getUser({ username }) {
 
 async function authenticateUser({ username, password }) {
   const sql = `
-    SELECT u.*, p.relname
-    FROM users u, pg_class p
+    SELECT u.*,
+           CASE WHEN EXISTS(SELECT 1 FROM agents a WHERE a.user_id = u.id) THEN true ELSE false END AS is_agent,
+           CASE WHEN EXISTS(SELECT 1 FROM supervisors s WHERE s.user_id = u.id) THEN true ELSE false END AS is_supervisor
+    FROM users u
     WHERE username = $1
   `;
   const values = [
@@ -169,7 +170,8 @@ async function authenticateUser({ username, password }) {
         });
     });
     return match
-        ? {id: result.id, username: result.username, firstName: result.first_name, lastName: result.last_name}
+        ? {id: result.id, username: result.username, firstName: result.first_name, lastName: result.last_name,
+            isAgent: result.is_agent, isSupervisor: result.is_supervisor}
         : null;
   }
   return null;
