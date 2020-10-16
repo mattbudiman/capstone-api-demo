@@ -31,7 +31,9 @@ function convertCallToCamelCase(call) {
         neutral: call.sentiment.scores.neutral,
         negative: call.sentiment.scores.negative
       }
-    }
+  },
+  callLength: call.call_length,
+  timeStamp: call.time_stamp
   };
 }
 
@@ -184,7 +186,9 @@ async function getCallsBy(agentId) {
       agent_id,
       customer_id,
       transcript,
-      to_json(sentiment) AS sentiment
+      to_json(sentiment) AS sentiment,
+      call_length,
+      time_stamp
     FROM calls WHERE agent_id = $1
   `;
   const values = [agentId];

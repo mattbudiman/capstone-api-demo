@@ -48,6 +48,8 @@ CREATE TABLE calls (
   customer_id INTEGER NOT NULL,
   transcript TEXT,
   sentiment SENTIMENT,
+  call_length INTEGER,
+  time_stamp TIMESTAMP,
   PRIMARY KEY (id),
   FOREIGN KEY (agent_id) REFERENCES agents (user_id)
     ON DELETE CASCADE,
