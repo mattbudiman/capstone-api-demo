@@ -21,14 +21,14 @@ CREATE TABLE users (
 );
 
 CREATE TABLE agents (
-  user_id INTEGER,
+  user_id BIGINT,
   PRIMARY KEY (user_id),
   FOREIGN KEY (user_id) REFERENCES users (id)
     ON DELETE CASCADE
 );
 
 CREATE TABLE supervisors (
-  user_id INTEGER,
+  user_id BIGINT,
   PRIMARY KEY (user_id),
   FOREIGN KEY (user_id) REFERENCES users (id)
     ON DELETE CASCADE
@@ -44,8 +44,8 @@ CREATE TABLE customers (
 
 CREATE TABLE calls (
   id BIGSERIAL,
-  agent_id INTEGER NOT NULL,
-  customer_id INTEGER NOT NULL,
+  agent_id BIGINT NOT NULL,
+  customer_id BIGINT NOT NULL,
   transcript TEXT,
   sentiment SENTIMENT,
   call_length INTEGER,
