@@ -51,6 +51,8 @@ VALUES (6);
 INSERT INTO agents(user_id)
 VALUES (7);
 
+INSERT INTO agents(user_id)
+VALUES (8);
 
 
 ---SUPERVISORS---

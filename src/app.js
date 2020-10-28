@@ -28,6 +28,7 @@ app.post('/api/v1/calls', Authorize.supervisor, upload.single('audio'), async (r
   try {
     const agentId = parseInt(req.body.agentId);
     const customerId = parseInt(req.body.customerId);
+    console.log(agentId, customerId);
 
     const call = await db.createEmptyCall({ agentId, customerId });
 
@@ -71,6 +72,21 @@ app.get('/api/v1/me/calls', Authorize.agent, async (req, res) => {
     res.send({ ok: true, calls });
   } catch (error) {
     res.send({ ok: false, message: `Error: ${JSON.stringify(error)}` });
+  }
+});
+
+// Get particular call
+app.get('/api/v1/me/calls/:callId', Authorize.agent, async (req, res) => {
+  const agentId = req.session.userId;
+  const callId = req.params.callId;
+  try {
+    const call = await db.getCall(agentId, callId);
+    if (!call) {
+      return res.status(404).end(JSON.stringify({ ok: false, message: 'Call not found' }));
+    }
+    res.send({ ok: true, call });
+  } catch (error) {
+    res.send({ ok: false, message: error.message });
   }
 });
 

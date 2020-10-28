@@ -1,6 +1,8 @@
 const {
   BlobServiceClient,
-  StorageSharedKeyCredential
+  StorageSharedKeyCredential,
+  generateBlobSASQueryParameters,
+  BlobSASPermissions
 } = require('@azure/storage-blob');
 
 const accountName = process.env.STORAGE_ACCOUNT_NAME;
@@ -31,6 +33,23 @@ async function uploadCall(file, callId) {
   return audioUrl;
 }
 
+// Get SAS url to a call so client can access
+function getSasUrl(callId) {
+  const blobName = `${callId}.wav`;
+  const sas = generateBlobSASQueryParameters(
+    {
+      containerName,
+      blobName,
+      permissions: BlobSASPermissions.parse('r'),
+      expiresOn: new Date(new Date().valueOf() + 1.2e+6)  // 20 minute access
+    },
+    sharedKeyCredential
+  );
+  const sasUrl = `${accountUrl}/${containerName}/${blobName}?${sas}`;
+  return sasUrl;
+}
+
 module.exports = {
-  uploadCall
+  uploadCall,
+  getSasUrl
 }

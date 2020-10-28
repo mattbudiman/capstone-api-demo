@@ -1,5 +1,6 @@
 const { Pool } = require('pg');
 const bcrypt = require('bcrypt');
+const Azure = require('../Azure');
 
 const pool = new Pool();
 
@@ -245,6 +246,32 @@ async function getCustomers() {
   return customers;
 }
 
+async function getCall(agentId, callId) {
+  const sql = `
+    SELECT
+      id,
+      agent_id,
+      customer_id,
+      transcript,
+      to_json(sentiment) AS sentiment,
+      call_length,
+      time_stamp
+    FROM calls
+    WHERE
+      agent_id = $1 AND
+      id = $2
+  `;
+  const values = [agentId, callId];
+  const result = await querySingle(sql, values);
+  if (!result) {
+    return null;
+  }
+  console.log(result);
+  const call = convertCallToCamelCase(result);
+  call.url = Azure.Storage.getSasUrl(callId);
+  return call;
+}
+
 module.exports = {
   createEmptyCall,
   createCall,
@@ -252,5 +279,6 @@ module.exports = {
   authenticateUser,
   getCallsBy,
   getAgents,
-  getCustomers
+  getCustomers,
+  getCall
 };
