@@ -90,6 +90,87 @@ app.get('/api/v1/me/calls/:callId', Authorize.agent, async (req, res) => {
   }
 });
 
+
+// Get all departments
+app.get('/api/v1/departments', Authorize.user, async (req, res) => {
+  try {
+    const departments = await db.getDepartments();
+    res.send({ ok: true, departments });
+  } catch (error) {
+    res.send({ ok: false, message: error.message });
+  }
+});
+
+app.get('/api/v1/departments/:departmentId', Authorize.user, async (req, res) => {
+  const departmentId = req.params.departmentId;
+  try {
+    const department = await db.getDepartment(departmentId);
+    if (!department) {
+      return res.status(404).end(JSON.stringify({ ok: false, message: 'Department not found' }));
+    }
+    res.send({ ok: true, department });
+  } catch (error) {
+    res.send({ ok: false, message: error.message });
+  }
+});
+
+// Get members of a specific department
+app.get('/api/v1/departments/:departmentId/members', Authorize.user, async (req, res) => {
+  const departmentId = req.params.departmentId;
+  try {
+    const members = await db.getDepartmentMembers(departmentId);
+    res.send({ ok: true, members });
+  } catch (error) {
+    res.send({ ok: false, message: error.message });
+  }
+});
+
+// Add member to a department
+app.post('/api/v1/departments/:departmentId/members', Authorize.user, async (req, res) => {
+  const departmentId = req.params.departmentId;
+  const userId = req.body.userId;
+  try {
+    const members = await db.addUserToDepartment(departmentId, userId);
+    res.send({ ok: true, members });
+  } catch (error) {
+    res.send({ ok: false, message: error.message });
+  }
+});
+
+// Remove member from department
+app.delete('/api/v1/departments/:departmentId/members/:userId', Authorize.user, async (req, res) => {
+  const departmentId = req.params.departmentId;
+  const userId = req.params.userId;
+  try {
+    const members = await db.removeUserFromDepartment(departmentId, userId);
+    res.send({ ok: true, members });
+  } catch (error) {
+    res.send({ ok: false, message: error.message });
+  }
+});
+
+// Get departments the logged in user is a part of
+app.get('/api/v1/me/departments', Authorize.user, async (req, res) => {
+  const userId = req.session.userId;
+  try {
+    const departments = await db.getUserDepartments(userId);
+    res.send({ ok: true, departments });
+  } catch (error) {
+    res.send({ ok: false, message: error.message });
+  }
+});
+
+// Get departments the logged in supervisor manages
+app.get('/api/v1/me/departments_managed', Authorize.supervisor, async (req, res) => {
+  const supervisorId = req.session.userId;
+  try {
+    const departmentsManaged = await db.getDepartmentsManaged(supervisorId);
+    res.send({ ok: true, departmentsManaged });
+  } catch (error) {
+    res.send({ ok: false, message: error.message });
+  }
+});
+
 app.post('/api/v1/login', async (req, res) => {
   res.setHeader('Access-Control-Allow-Credentials', 'true');
 

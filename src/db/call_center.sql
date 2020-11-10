@@ -34,6 +34,25 @@ CREATE TABLE supervisors (
     ON DELETE CASCADE
 );
 
+CREATE TABLE departments (
+  id BIGSERIAL,
+  name VARCHAR(255),
+  manager_id BIGINT,
+  PRIMARY KEY (id),
+  FOREIGN KEY (manager_id) REFERENCES supervisors (user_id)
+    ON DELETE CASCADE
+);
+
+CREATE TABLE in_department (
+  user_id BIGINT,
+  department_id BIGINT,
+  PRIMARY KEY (user_id, department_id),
+  FOREIGN KEY (user_id) REFERENCES users (id)
+    ON DELETE CASCADE,
+  FOREIGN KEY (department_id) REFERENCES departments (id)
+    ON DELETE CASCADE
+);
+
 CREATE TABLE customers (
   id BIGSERIAL,
   first_name VARCHAR(20) NOT NULL,
