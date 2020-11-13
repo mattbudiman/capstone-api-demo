@@ -103,6 +103,7 @@ app.get('/api/v1/departments', Authorize.user, async (req, res) => {
 
 app.get('/api/v1/departments/:departmentId', Authorize.user, async (req, res) => {
   const departmentId = req.params.departmentId;
+  console.log('Department ID:', departmentId);
   try {
     const department = await db.getDepartment(departmentId);
     if (!department) {

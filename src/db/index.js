@@ -279,18 +279,6 @@ async function getDepartments() {
   return departments;
 }
 
-// Get department with specified departmentId
-async function getDepartment(departmentId) {
-  const sql = `
-    SELECT D.id, D.name, D.manager_id AS "managerId"
-    FROM departments D
-    WHERE D.id = $1
-  `;
-  const values = [departmentId];
-  const department = await querySingle(sql, values);
-  return department;
-}
-
 // Get members of department with specified departmentId
 async function getDepartmentMembers(departmentId) {
   const sql = `
@@ -311,6 +299,19 @@ async function getDepartmentMembers(departmentId) {
   const values = [departmentId];
   const members = await query(sql, values);
   return members;
+}
+
+// Get department with specified departmentId
+async function getDepartment(departmentId) {
+  const sql = `
+    SELECT D.id, D.name, D.manager_id AS "managerId"
+    FROM departments D
+    WHERE D.id = $1
+  `;
+  const values = [departmentId];
+  const department = await querySingle(sql, values);
+  department.members = await getDepartmentMembers(departmentId);
+  return department;
 }
 
 // Get departments a user is a member of
