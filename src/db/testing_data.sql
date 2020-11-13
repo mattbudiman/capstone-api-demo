@@ -141,3 +141,24 @@ VALUES (3, 2, 'Life is like a box of chocolates, you never know what youre gonna
 
 INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
 VALUES (7, 3, 'Reflect upon your present blessings -- of which every man has many -- not on your past misfortunes, of which all men have some.', ( 'neutral', ( 0.90, 0.08 , 0.02) ), 777, '2020-10-12 23:54' );
+
+
+
+--DEPARTMENTS--
+INSERT INTO departments (name, manager_id)
+VALUES ('Department 1', 8), ('Department 2', 8), ('Department 3', 9);
+
+
+--DEPARTMENT MEMBERSHIPS--
+INSERT INTO in_department (user_id, department_id)
+VALUES
+  (1, 1),
+  (2, 1),
+  (3, 1),
+  (4, 1),
+  (5, 1),
+  (6, 2),
+  (7, 2),
+  (8, 2),
+  (9, 3),
+  (10, 3);

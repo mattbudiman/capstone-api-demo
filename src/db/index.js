@@ -272,6 +272,97 @@ async function getCall(agentId, callId) {
   return call;
 }
 
+// Get all departments
+async function getDepartments() {
+  const sql = 'SELECT id, name, manager_id AS "managerId" FROM departments';
+  const departments = await query(sql);
+  return departments;
+}
+
+// Get department with specified departmentId
+async function getDepartment(departmentId) {
+  const sql = `
+    SELECT D.id, D.name, D.manager_id AS "managerId"
+    FROM departments D
+    WHERE D.id = $1
+  `;
+  const values = [departmentId];
+  const department = await querySingle(sql, values);
+  return department;
+}
+
+// Get members of department with specified departmentId
+async function getDepartmentMembers(departmentId) {
+  const sql = `
+    SELECT
+      id,
+      first_name AS "firstName",
+      last_name AS "lastName",
+      username,
+      id IN (SELECT user_id FROM agents) AS "isAgent",
+      id IN (SELECT user_id FROM supervisors) AS "isSupervisor"
+    FROM users
+    WHERE id IN (
+      SELECT user_id
+      FROM in_department
+      WHERE department_id = $1
+    )
+  `;
+  const values = [departmentId];
+  const members = await query(sql, values);
+  return members;
+}
+
+// Get departments a user is a member of
+async function getUserDepartments(userId) {
+  const sql = `
+    SELECT D.id, D.name, D.manager_id AS "managerId"
+    FROM departments D, in_department I
+    WHERE
+      I.user_id = $1 AND
+      D.id = I.department_id
+  `;
+  const values = [userId];
+  const departments = await query(sql, values);
+  return departments;
+}
+
+// Get departments that a supservisor manages
+async function getDepartmentsManaged(supervisorId) {
+  const sql = `
+    SELECT D.id, D.name, D.manager_id AS "managerId"
+    FROM departments D
+    WHERE D.manager_id = $1
+  `;
+  const values = [supervisorId];
+  const departments = await query(sql, values);
+  return departments;
+}
+
+// Add user to a department
+async function addUserToDepartment(departmentId, userId) {
+  const sql = `
+    INSERT INTO in_department (department_id, user_id)
+    VALUES ($1, $2)
+  `;
+  const values = [departmentId, userId];
+  await query(sql, values);
+  const members = await getDepartmentMembers(departmentId);
+  return members;
+}
+
+// Remove a user from a department
+async function removeUserFromDepartment(departmentId, userId) {
+  const sql = `
+    DELETE FROM in_department
+    WHERE department_id = $1 AND user_id = $2
+  `;
+  const values = [departmentId, userId];
+  await query(sql, values);
+  const members = await getDepartmentMembers(departmentId);
+  return members;
+}
+
 module.exports = {
   createEmptyCall,
   createCall,
@@ -280,5 +371,12 @@ module.exports = {
   getCallsBy,
   getAgents,
   getCustomers,
-  getCall
+  getCall,
+  getDepartments,
+  getDepartment,
+  getDepartmentMembers,
+  getUserDepartments,
+  getDepartmentsManaged,
+  addUserToDepartment,
+  removeUserFromDepartment
 };
