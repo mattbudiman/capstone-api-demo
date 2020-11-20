@@ -142,6 +142,116 @@ VALUES (3, 2, 'Life is like a box of chocolates, you never know what youre gonna
 INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
 VALUES (7, 3, 'Reflect upon your present blessings -- of which every man has many -- not on your past misfortunes, of which all men have some.', ( 'neutral', ( 0.90, 0.08 , 0.02) ), 777, '2020-10-12 23:54' );
 
+--Week 11-18 -  11 - 25 --
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 1, 'Knowing others is to be clever. Knowing yourself is to be enlightened.', ( 'neutral', ( 0.35, 0.60 , 0.05) ), 20, '2020-11-18 20:54' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 3, 'Overcoming others requires force. Overcoming yourself requires strength', ( 'neutral', ( 0.20, 0.55 , 0.25) ), 15, '2020-11-19 13:24' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 5, 'To know that you have enough is to be rich', ( 'positive', ( 0.70, 0.25 , 0.05) ), 18, '2020-11-20 14:18' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 7, 'A person of high virtue is not conscious of virtue and therefore possesses Virtue. A person of little virtue tries to be virtuous and therefore lacks Virtue.', ( 'positive', ( 0.70, 0.15 , 0.15) ), 15, '2020-11-21 04:36' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 9, 'When we lose the Tao, we turn to Virtue. When we lose Virtue, we turn to kindness. When we lose kindness, we turn to morality.', ( 'positive', ( 0.70, 0.25 , 0.05) ), 45, '2020-11-22 22:01' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 2, 'Be content with what you have and you will not be disgraced. Know when to stop and you will be preserved from danger. Only in this way will you long endure.', ( 'neutral', ( 0.25, 0.75 , 0.25) ), 35, '2020-11-23 21:01' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 4, 'I am kind to those who are kind. I am also kind to those who are not kind. Thus, there is an increase in kindness.', ( 'positive', ( 0.80, 0.20 , 0.20) ), 60, '2020-11-24 18:50' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 6, 'If I have even little sense, I will walk upon the great path of Tao and only fear straying from it. This Great Way is straight and smooth yet people often prefer the side roads.', ( 'neutral', ( 0.10, 0.65 , 0.25) ), 87, '2020-11-25 11:30' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 8, 'A tree as big as a persons embrace begins as a tiny shoot. A terrace nine stories high rises from a shovelful of earth. A journey of a thousand miles begins under your feet.', ( 'neutral', ( 0.10, 0.65 , 0.25) ), 99, '2020-11-20 12:30' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 10, 'Because of gentleness I am able to be courageous. Because of simplicity I am able to be generous. Because of daring not to be first I am able to lead.', ( 'positive', ( 0.70, 0.20 , 0.10) ), 35, '2020-11-21 22:30' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 2, 'A person whose courage lies in daring will meet death. A person whose courage lies in not daring will encounter life', ( 'neutral', ( 0.10, 0.80 , 0.10) ), 35, '2020-11-21 22:30' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 3, 'The mighty tree will invite the axe.', ( 'neutral', ( 0.05, 0.80 , 0.15) ), 7, '2020-11-22 14:26' );
+
+--Month Nov 2020--
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 1, 'Apple', ( 'neutral', ( 0.05, 0.80 , 0.15) ), 7, '2020-11-01 14:26' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 2, 'Banana', ( 'positive', ( 0.80, 0.20 , 0.20) ), 8, '2020-11-05 14:26' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 4, 'Dragonfruit', ( 'neutral', ( 0.05, 0.80 , 0.15) ), 27, '2020-11-07 14:26' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 5, 'Kiwi', ( 'negative', ( 0.15, 0.15 , 0.70) ), 7, '2020-11-12 14:26' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 6, 'Starfruit', ( 'neutral', ( 0.05, 0.80 , 0.15) ), 57, '2020-11-17 14:26' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 7, 'Coconut', ( 'positive', ( 0.90, 0.05 , 0.05) ), 7, '2020-11-26 14:26' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 8, 'Pineapple', ( 'neutral', ( 0.05, 0.80 , 0.15) ), 100, '2020-11-28 14:26' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 9, 'Watermelon', ( 'negative', ( 0.15, 0.15 , 0.70) ), 20, '2020-11-28 14:26' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 10, 'Peach', ( 'neutral', ( 0.15, 0.70 , 0.15) ), 7, '2020-11-30 14:26' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 9, 'Mango', ( 'positive', ( 0.85, 0.05 , 0.10) ), 2, '2020-11-07 14:26' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 8, 'Durian', ( 'negative', ( 0.05, 0.10 , 0.85) ), 7, '2020-11-29 14:26' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 7, 'Apricot', ( 'neutral', ( 0.05, 0.80 , 0.15) ), 3, '2020-11-29 14:26' );
+
+--year 2020--
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 1, 'Angelfish', ( 'positive', ( 0.95, 0.03 , 0.02) ), 760, '2020-01-01 14:26' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 1, 'Arowana', ( 'neutral', ( 0.05, 0.80 , 0.15) ), 2, '2020-02-01 14:26' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 1, 'Betta', ( 'negative', ( 0.01, 0.01 , 0.98) ), 35, '2020-03-01 14:26' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 1, 'Black Ghost Knifefish', ( 'negative', ( 0.10, 0.05 , 0.85) ), 7, '2020-04-01 14:26' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 1, 'Clown Loach', ( 'neutral', ( 0.05, 0.80 , 0.15) ), 7, '2020-05-01 14:26' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 1, 'Guppie', ( 'neutral', ( 0.05, 0.80 , 0.15) ), 10, '2020-06-01 14:26' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 1, 'Swordtail', ( 'positive', ( 0.65, 0.20 , 0.25) ), 7, '2020-07-01 14:26' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 1, 'Rainbowfish', ( 'neutral', ( 0.05, 0.80 , 0.15) ), 7, '2020-08-01 14:26' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 1, 'Tetra', ( 'neutral', ( 0.05, 0.80 , 0.15) ), 50, '2020-09-01 14:26' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 1, 'Butterflyfish', ( 'positive', ( 0.95, 0.02 , 0.03) ), 7, '2020-10-01 14:26' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 1, 'Clownfish', ( 'negative', ( 0.15, 0.05 , 0.80) ), 7, '2020-12-01 14:26' );
+
+INSERT INTO calls(agent_id, customer_id, transcript, sentiment, call_length, time_stamp)
+VALUES (1, 1, 'Blue Tang', ( 'positive', ( 0.95, 0.03 , 0.02) ), 7, '2020-01-19 14:26' );
 
 
 --DEPARTMENTS--
