@@ -225,6 +225,21 @@ async function getAgents() {
   return agents;
 }
 
+async function getUsers() {
+  const sql = `
+    SELECT
+      id,
+      first_name AS "firstName",
+      last_name AS "lastName",
+      username,
+      id IN (SELECT user_id FROM agents) AS "isAgent",
+      id IN (SELECT user_id FROM supervisors) AS "isSupervisor"
+    FROM users
+  `;
+  const users = await query(sql);
+  return users;
+}
+
 async function getCustomers() {
   const sql = `
     SELECT
@@ -274,9 +289,31 @@ async function getCall(agentId, callId) {
 
 // Get all departments
 async function getDepartments() {
-  const sql = 'SELECT id, name, manager_id AS "managerId" FROM departments';
+  const sql = 'SELECT id, name FROM departments';
   const departments = await query(sql);
   return departments;
+}
+
+// Get department managers
+async function getDepartmentManagers(departmentId) {
+  const sql = `
+    SELECT
+      id,
+      first_name AS "firstName",
+      last_name AS "lastName",
+      username,
+      id IN (SELECT user_id FROM agents) AS "isAgent",
+      id IN (SELECT user_id FROM supervisors) AS "isSupervisor"
+    FROM users
+    WHERE id IN (
+      SELECT supervisor_id
+      FROM manages_department
+      WHERE department_id = $1
+    )
+  `;
+  const values = [departmentId];
+  const managers = await query(sql, values);
+  return managers;
 }
 
 // Get members of department with specified departmentId
@@ -304,12 +341,13 @@ async function getDepartmentMembers(departmentId) {
 // Get department with specified departmentId
 async function getDepartment(departmentId) {
   const sql = `
-    SELECT D.id, D.name, D.manager_id AS "managerId"
+    SELECT D.id, D.name
     FROM departments D
     WHERE D.id = $1
   `;
   const values = [departmentId];
   const department = await querySingle(sql, values);
+  department.managers = await getDepartmentManagers(departmentId);
   department.members = await getDepartmentMembers(departmentId);
   return department;
 }
@@ -317,7 +355,7 @@ async function getDepartment(departmentId) {
 // Get departments a user is a member of
 async function getUserDepartments(userId) {
   const sql = `
-    SELECT D.id, D.name, D.manager_id AS "managerId"
+    SELECT D.id, D.name
     FROM departments D, in_department I
     WHERE
       I.user_id = $1 AND
@@ -331,9 +369,13 @@ async function getUserDepartments(userId) {
 // Get departments that a supservisor manages
 async function getDepartmentsManaged(supervisorId) {
   const sql = `
-    SELECT D.id, D.name, D.manager_id AS "managerId"
+    SELECT D.id, D.name,
     FROM departments D
-    WHERE D.manager_id = $1
+    WHERE D.id IN (
+      SELECT M.department_id
+      FROM manages_department M
+      WHERE M.supervisor_id = $1
+    )
   `;
   const values = [supervisorId];
   const departments = await query(sql, values);
@@ -345,11 +387,12 @@ async function addUserToDepartment(departmentId, userId) {
   const sql = `
     INSERT INTO in_department (department_id, user_id)
     VALUES ($1, $2)
+    ON CONFLICT DO NOTHING
   `;
   const values = [departmentId, userId];
   await query(sql, values);
-  const members = await getDepartmentMembers(departmentId);
-  return members;
+  const department = await getDepartment(departmentId);
+  return department;
 }
 
 // Remove a user from a department
@@ -360,8 +403,8 @@ async function removeUserFromDepartment(departmentId, userId) {
   `;
   const values = [departmentId, userId];
   await query(sql, values);
-  const members = await getDepartmentMembers(departmentId);
-  return members;
+  const department = await getDepartment(departmentId);
+  return department;
 }
 
 module.exports = {
@@ -371,6 +414,7 @@ module.exports = {
   authenticateUser,
   getCallsBy,
   getAgents,
+  getUsers,
   getCustomers,
   getCall,
   getDepartments,

@@ -1,4 +1,5 @@
 ---CLEAR: Use to delete all the tables ---
+DROP TABLE manages_department;
 DROP TABLE in_department;
 DROP TABLE departments;
 DROP TABLE calls;

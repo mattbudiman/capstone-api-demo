@@ -255,8 +255,8 @@ VALUES (1, 1, 'Blue Tang', ( 'positive', ( 0.95, 0.03 , 0.02) ), 7, '2020-01-19 
 
 
 --DEPARTMENTS--
-INSERT INTO departments (name, manager_id)
-VALUES ('Department 1', 8), ('Department 2', 8), ('Department 3', 9);
+INSERT INTO departments (name)
+VALUES ('Department 1'), ('Department 2'), ('Department 3');
 
 
 --DEPARTMENT MEMBERSHIPS--
@@ -272,3 +272,14 @@ VALUES
   (8, 2),
   (9, 3),
   (10, 3);
+
+
+--DEPARTMENT MANAGERS--
+INSERT INTO manages_department (supervisor_id, department_id)
+VALUES
+  (8, 1),
+  (9, 1),
+  (10, 1),
+  (8, 2),
+  (10, 2),
+  (9, 3)

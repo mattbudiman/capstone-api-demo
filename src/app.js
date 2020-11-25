@@ -51,6 +51,15 @@ app.get('/api/v1/agents', Authorize.supervisor, async (req, res) => {
   }
 });
 
+app.get('/api/v1/users', Authorize.supervisor, async (req, res) => {
+  try {
+    const users = await db.getUsers();
+    res.send({ ok: true, users });
+  } catch (error) {
+    res.send({ ok: false, message: error.message });
+  }
+});
+
 app.get('/api/v1/customers', Authorize.supervisor, async (req, res) => {
   try {
     const customers = await db.getCustomers();
@@ -131,8 +140,8 @@ app.post('/api/v1/departments/:departmentId/members', Authorize.user, async (req
   const departmentId = req.params.departmentId;
   const userId = req.body.userId;
   try {
-    const members = await db.addUserToDepartment(departmentId, userId);
-    res.send({ ok: true, members });
+    const department = await db.addUserToDepartment(departmentId, userId);
+    res.send({ ok: true, department });
   } catch (error) {
     res.send({ ok: false, message: error.message });
   }
@@ -143,8 +152,8 @@ app.delete('/api/v1/departments/:departmentId/members/:userId', Authorize.user, 
   const departmentId = req.params.departmentId;
   const userId = req.params.userId;
   try {
-    const members = await db.removeUserFromDepartment(departmentId, userId);
-    res.send({ ok: true, members });
+    const department = await db.removeUserFromDepartment(departmentId, userId);
+    res.send({ ok: true, department });
   } catch (error) {
     res.send({ ok: false, message: error.message });
   }

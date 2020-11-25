@@ -37,10 +37,7 @@ CREATE TABLE supervisors (
 CREATE TABLE departments (
   id BIGSERIAL,
   name VARCHAR(255),
-  manager_id BIGINT,
-  PRIMARY KEY (id),
-  FOREIGN KEY (manager_id) REFERENCES supervisors (user_id)
-    ON DELETE CASCADE
+  PRIMARY KEY (id)
 );
 
 CREATE TABLE in_department (
@@ -48,6 +45,16 @@ CREATE TABLE in_department (
   department_id BIGINT,
   PRIMARY KEY (user_id, department_id),
   FOREIGN KEY (user_id) REFERENCES users (id)
+    ON DELETE CASCADE,
+  FOREIGN KEY (department_id) REFERENCES departments (id)
+    ON DELETE CASCADE
+);
+
+CREATE TABLE manages_department (
+  supervisor_id BIGINT,
+  department_id BIGINT,
+  PRIMARY KEY (supervisor_id, department_id),
+  FOREIGN KEY (supervisor_id) REFERENCES supervisors (user_id)
     ON DELETE CASCADE,
   FOREIGN KEY (department_id) REFERENCES departments (id)
     ON DELETE CASCADE
@@ -68,7 +75,7 @@ CREATE TABLE calls (
   transcript TEXT,
   sentiment SENTIMENT,
   call_length INTEGER,
-  time_stamp TIMESTAMP,
+  time_stamp TIMESTAMP NOT NULL DEFAULT NOW(),
   PRIMARY KEY (id),
   FOREIGN KEY (agent_id) REFERENCES agents (user_id)
     ON DELETE CASCADE,
