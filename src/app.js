@@ -22,7 +22,7 @@ app.get('/', (req, res) => {
   res.sendFile(path.resolve(__dirname, '..', 'public', 'index.html'));
 });
 
-// API ROUTES
+// API ROUTESz
 app.post('/api/v1/calls', Authorize.supervisor, upload.single('audio'), async (req, res) => {
   console.log(req.file);
   try {
