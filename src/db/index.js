@@ -369,7 +369,7 @@ async function getUserDepartments(userId) {
 // Get departments that a supservisor manages
 async function getDepartmentsManaged(supervisorId) {
   const sql = `
-    SELECT D.id, D.name,
+    SELECT D.id, D.name
     FROM departments D
     WHERE D.id IN (
       SELECT M.department_id
