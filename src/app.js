@@ -84,6 +84,18 @@ app.get('/api/v1/me/calls', Authorize.agent, async (req, res) => {
   }
 });
 
+// Get all the calls by a specified agent
+app.get('/api/v1/calls_by/:agentId', Authorize.supervisor, async (req, res) => {
+    const agentId = req.params.agentId;
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    try {
+        const calls = await db.getCallsBy(agentId);
+        res.send({ ok: true, calls });
+    } catch (error) {
+    res.send({ ok: false, message: `Error: ${JSON.stringify(error)}` });
+  }
+});
+
 // Get particular call
 app.get('/api/v1/me/calls/:callId', Authorize.agent, async (req, res) => {
   const agentId = req.session.userId;
@@ -99,7 +111,6 @@ app.get('/api/v1/me/calls/:callId', Authorize.agent, async (req, res) => {
   }
 });
 
-
 // Get all departments
 app.get('/api/v1/departments', Authorize.user, async (req, res) => {
   try {
@@ -110,6 +121,7 @@ app.get('/api/v1/departments', Authorize.user, async (req, res) => {
   }
 });
 
+// Get a specific deparment
 app.get('/api/v1/departments/:departmentId', Authorize.user, async (req, res) => {
   const departmentId = req.params.departmentId;
   console.log('Department ID:', departmentId);
