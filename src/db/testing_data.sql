@@ -1,33 +1,33 @@
 ---USERS--- Note: All passwords are just 'E'
-INSERT INTO users(first_name, last_name, username, password)
-VALUES ('Jay', 'Gatsby', 'Jay', '$2b$10$J7jJOfPeSHVPsY1xskkPOeBuWResmleKXvfgltBSqhjwOlfqJNnJ6');
+INSERT INTO users(first_name, last_name, username, password, email, phone_number)
+VALUES ('Jay', 'Gatsby', 'Jay', '$2b$10$J7jJOfPeSHVPsY1xskkPOeBuWResmleKXvfgltBSqhjwOlfqJNnJ6', 'example@example.com', '555-456-7890');
 
-INSERT INTO users(first_name, last_name, username, password)
-VALUES ('Don', 'Quixote', 'Don', '$2b$10$J7jJOfPeSHVPsY1xskkPOeBuWResmleKXvfgltBSqhjwOlfqJNnJ6');
+INSERT INTO users(first_name, last_name, username, password, email, phone_number)
+VALUES ('Don', 'Quixote', 'Don', '$2b$10$J7jJOfPeSHVPsY1xskkPOeBuWResmleKXvfgltBSqhjwOlfqJNnJ6', 'example@example.com', '555-456-7890');
 
-INSERT INTO users(first_name, last_name, username, password)
-VALUES ('Ebinizer', 'Scrooge', 'Ebinezer', '$2b$10$J7jJOfPeSHVPsY1xskkPOeBuWResmleKXvfgltBSqhjwOlfqJNnJ6');
+INSERT INTO users(first_name, last_name, username, password, email, phone_number)
+VALUES ('Ebinizer', 'Scrooge', 'Ebinezer', '$2b$10$J7jJOfPeSHVPsY1xskkPOeBuWResmleKXvfgltBSqhjwOlfqJNnJ6', 'example@example.com', '555-456-7890');
 
-INSERT INTO users(first_name, last_name, username, password)
-VALUES ('Edna', 'Pontellier', 'Edna', '$2b$10$J7jJOfPeSHVPsY1xskkPOeBuWResmleKXvfgltBSqhjwOlfqJNnJ6');
+INSERT INTO users(first_name, last_name, username, password, email, phone_number)
+VALUES ('Edna', 'Pontellier', 'Edna', '$2b$10$J7jJOfPeSHVPsY1xskkPOeBuWResmleKXvfgltBSqhjwOlfqJNnJ6', 'example@example.com', '555-456-7890');
 
-INSERT INTO users(first_name, last_name, username, password)
-VALUES ('Max', 'Disher', 'Max', '$2b$10$J7jJOfPeSHVPsY1xskkPOeBuWResmleKXvfgltBSqhjwOlfqJNnJ6');
+INSERT INTO users(first_name, last_name, username, password, email, phone_number)
+VALUES ('Max', 'Disher', 'Max', '$2b$10$J7jJOfPeSHVPsY1xskkPOeBuWResmleKXvfgltBSqhjwOlfqJNnJ6', 'example@example.com', '555-456-7890');
 
-INSERT INTO users(first_name, last_name, username, password)
-VALUES ('Sancho', 'Panza', 'Sancho', '$2b$10$J7jJOfPeSHVPsY1xskkPOeBuWResmleKXvfgltBSqhjwOlfqJNnJ6');
+INSERT INTO users(first_name, last_name, username, password, email, phone_number)
+VALUES ('Sancho', 'Panza', 'Sancho', '$2b$10$J7jJOfPeSHVPsY1xskkPOeBuWResmleKXvfgltBSqhjwOlfqJNnJ6', 'example@example.com', '555-456-7890');
 
-INSERT INTO users(first_name, last_name, username, password)
-VALUES ('Charles', 'Marlow', 'Charles', '$2b$10$J7jJOfPeSHVPsY1xskkPOeBuWResmleKXvfgltBSqhjwOlfqJNnJ6');
+INSERT INTO users(first_name, last_name, username, password, email, phone_number)
+VALUES ('Charles', 'Marlow', 'Charles', '$2b$10$J7jJOfPeSHVPsY1xskkPOeBuWResmleKXvfgltBSqhjwOlfqJNnJ6', 'example@example.com', '555-456-7890');
 
-INSERT INTO users(first_name, last_name, username, password)
-VALUES ('Samwise', 'Gamgee', 'Sam', '$2b$10$J7jJOfPeSHVPsY1xskkPOeBuWResmleKXvfgltBSqhjwOlfqJNnJ6');
+INSERT INTO users(first_name, last_name, username, password, email, phone_number)
+VALUES ('Samwise', 'Gamgee', 'Sam', '$2b$10$J7jJOfPeSHVPsY1xskkPOeBuWResmleKXvfgltBSqhjwOlfqJNnJ6', 'example@example.com', '555-456-7890');
 
-INSERT INTO users(first_name, last_name, username, password)
-VALUES ('George', 'Orr', 'George', '$2b$10$J7jJOfPeSHVPsY1xskkPOeBuWResmleKXvfgltBSqhjwOlfqJNnJ6');
+INSERT INTO users(first_name, last_name, username, password, email, phone_number)
+VALUES ('George', 'Orr', 'George', '$2b$10$J7jJOfPeSHVPsY1xskkPOeBuWResmleKXvfgltBSqhjwOlfqJNnJ6', 'example@example.com', '555-456-7890');
 
-INSERT INTO users(first_name, last_name, username, password)
-VALUES ('Zadok', 'Allen', 'Zadok', '$2b$10$J7jJOfPeSHVPsY1xskkPOeBuWResmleKXvfgltBSqhjwOlfqJNnJ6');
+INSERT INTO users(first_name, last_name, username, password, email, phone_number)
+VALUES ('Zadok', 'Allen', 'Zadok', '$2b$10$J7jJOfPeSHVPsY1xskkPOeBuWResmleKXvfgltBSqhjwOlfqJNnJ6', 'example@example.com', '555-456-7890');
 
 ---AGENTS---
 INSERT INTO agents(user_id)
