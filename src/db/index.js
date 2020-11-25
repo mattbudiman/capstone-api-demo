@@ -24,7 +24,7 @@ function convertCallToCamelCase(call) {
     agentId: call.agent_id,
     customerId: call.customer_id,
     transcript: call.transcript,
-    sentiment: {
+    sentiment: call.sentiment && {
       label: call.sentiment.label,
       scores: {
         positive: call.sentiment.scores.positive,
