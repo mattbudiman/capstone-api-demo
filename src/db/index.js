@@ -232,6 +232,8 @@ async function getUsers() {
       first_name AS "firstName",
       last_name AS "lastName",
       username,
+      email,
+      phone_number AS "phoneNumber",
       id IN (SELECT user_id FROM agents) AS "isAgent",
       id IN (SELECT user_id FROM supervisors) AS "isSupervisor"
     FROM users
