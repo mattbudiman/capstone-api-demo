@@ -199,6 +199,31 @@ async function getCallsBy(agentId) {
   return calls.map(call => convertCallToCamelCase(call));
 }
 
+// Get all the calls from a specified department
+async function getCallsByDepartment(departmentId) {
+    const sql = `
+    SELECT
+      id,
+      agent_id,
+      customer_id,
+      transcript,
+      to_json(sentiment) AS sentiment,
+      call_length,
+      time_stamp
+    FROM calls
+    WHERE agent_id IN (
+      SELECT A.user_id 
+      FROM agents A, in_department D
+      WHERE D.department_id = $1 AND D.user_id = A.user_id
+    )
+    `;
+    const values = [departmentId];
+    const calls = await query(sql, values);
+    console.log("departmentId", departmentId);
+    console.log("calls", calls);
+    return calls.map(call => convertCallToCamelCase(call));
+  }
+
 async function getAgents() {
   const sql = `
     SELECT
@@ -425,5 +450,6 @@ module.exports = {
   getUserDepartments,
   getDepartmentsManaged,
   addUserToDepartment,
-  removeUserFromDepartment
+  removeUserFromDepartment,
+  getCallsByDepartment
 };
