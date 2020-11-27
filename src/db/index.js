@@ -90,7 +90,7 @@ async function createCall({ agentId, customerId, transcript, sentiment }) {
   return convertCallToCamelCase(call);
 }
 
-async function createUser({ username, password, firstName, lastName }) {
+async function createUser({ username, password, firstName, lastName, email, phoneNumber }) {
     const hashedPassword = await new Promise((resolve, reject) => {
         bcrypt.hash(password, 10, function(err, hash) {
             if(err) reject(err);
@@ -102,16 +102,20 @@ async function createUser({ username, password, firstName, lastName }) {
       username,
       password,
       first_name,
-      last_name
+      last_name,
+      email,
+      phone_number
     )
-    VALUES ($1, $2, $3, $4)
+    VALUES ($1, $2, $3, $4, $5, $6)
     RETURNING *
     `;
     const values = [
         username,
         hashedPassword,
         firstName,
-        lastName
+        lastName,
+        email,
+        phoneNumber
     ];
     let user = null;
     const client = await pool.connect();  // Necessary to use transactions
@@ -125,7 +129,9 @@ async function createUser({ username, password, firstName, lastName }) {
             id: result.id,
             username: result.username,
             firstName: result.first_name,
-            lastName: result.last_name
+            lastName: result.last_name,
+            email: result.email,
+            phoneNumber: result.phoneNumber,
         };
     }
     catch(e) {
@@ -172,7 +178,7 @@ async function authenticateUser({ username, password }) {
     });
     return match
         ? {id: result.id, username: result.username, firstName: result.first_name, lastName: result.last_name,
-            isAgent: result.is_agent, isSupervisor: result.is_supervisor}
+          email: result.email, phoneNumber: result.phone_number, isAgent: result.is_agent, isSupervisor: result.is_supervisor}
         : null;
   }
   return null;

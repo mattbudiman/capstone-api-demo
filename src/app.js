@@ -216,15 +216,18 @@ app.post('/api/v1/login', async (req, res) => {
 
 app.post('/api/v1/register', async (req, res) => {
   res.setHeader('Access-Control-Allow-Credentials', 'true');
-
-  if (!req.body.username || !req.body.password || !req.body.firstName || !req.body.lastName) {
+  console.log(req.body)
+  if (!req.body.username || !req.body.password || !req.body.firstName 
+     || !req.body.lastName || !req.body.email || !req.body.phoneNumber) {
     return res.status(401).end(JSON.stringify({error: 'Missing Required Fields'}));
   }
   const result = await db.createUser({
     username: req.body.username,
     password: req.body.password,
     firstName: req.body.firstName,
-    lastName: req.body.lastName
+    lastName: req.body.lastName,
+    email: req.body.email,
+    phoneNumber: req.body.phoneNumber
   });
   if (result) {
     req.session.userId = result.id;
